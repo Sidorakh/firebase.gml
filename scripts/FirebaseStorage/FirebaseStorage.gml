@@ -83,5 +83,23 @@ function FirebaseStorage(_app, _app_id, _storage_bucket) constructor {
 			//show_message(result);
 		});
 	}
-	
+	function list_files(remote_path="",callback) {
+		var headers = ds_map_create();
+		var user = app.auth().current_user;
+		if (user != undefined) {
+			headers[? "Authorization"] = "Bearer " + app.auth().auth_token;	
+		}
+		var _target = bucket_url + "?prefix=" + url_encode(remote_path);
+		var http_options = {
+			headers: headers,
+			keep_header_map: false,
+			callback: callback,
+		}
+		http(_target,"GET","",http_options,function(status,result,options){
+			if (options.callback != undefined) {
+				options.callback(json_parse(result));
+			}
+		});
+		
+	}
 }

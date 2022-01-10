@@ -1,4 +1,4 @@
-function array_join(array,sep) {
+function array_join(array,sep="") {
 	var str = "";
 	for (var i=0;i<array_length(array);i++) {
 		str += string(array[i]);

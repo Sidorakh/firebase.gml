@@ -7,13 +7,25 @@ function FirebaseFirestore(_app, _project_id, _api_key) constructor {
 	function collection(_id) {
 		return new FirestoreCollection(app,_id,[_id]);
 	}
+	function new_doc_id() {
+		var char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		var auto_id = "";
+		for (var i=0;i<20;i++) {
+			auto_id += string_char_at(char,irandom(string_length(char)) + 1);
+		}
+		return auto_id;
+	}
 }
 
 function FirestoreCollection(_app,_collection_id,_path=[]) constructor {
 	app = _app;
 	collection_id = _collection_id;
 	path = _path;
-	function document(_id) {
+	function document(_id="") {
+		// if _id is blank, generate a new document
+		if (_id == "") {
+			_id = app.firestore().new_doc_id();
+		}
 		var _np = json_parse(json_stringify(path));
 		array_push(_np,_id);
 		return new FirestoreDocument(app,_id,_np);
@@ -87,6 +99,12 @@ function FirestoreDocument(_app,_document_id,_path=[]) constructor {
 		http(app.firestore().url+_suffix,"PUT",_doc_data.serialize(),options,function(status,result,options){
 			show_message(result);
 		});
+	}
+	function data() {
+		if (_doc_data == undefined) {
+			_doc_data = new FirestoreDocumentData(app,{},self);
+		}
+		return _doc_data;
 	}
 }
 

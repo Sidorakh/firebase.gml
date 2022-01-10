@@ -47,3 +47,11 @@ if (keyboard_check_pressed(ord("5"))) {
 		show_message(result);
 	})
 }
+if (keyboard_check_pressed(ord("6"))) {
+	var db = obj_tester.client.db;
+	var msg = "";
+	for (var i=0;i<20;i++) {
+		msg += db().next_push_id() + "\n";	
+	}
+	show_message(msg);
+}
